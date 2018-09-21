@@ -1,6 +1,6 @@
 
 fileIdx = 1;
-
+clear files
 %             P3, P4, O1, O2, P7, P8, Pz, Oz, POz, P1, P2, PO3, PO4, P5, P6, PO7, PO8 
 SSVEP_Chan = [ 7,  8,  9, 10, 15, 16, 19, 20,  31, 37, 38,  45,  46, 51, 52,  59,  60];
 
@@ -14,12 +14,12 @@ Headers(fileIdx, 2, :) = {'Rest | Run 01', 'Epoch: 2s | Analysis: Server'};
 fileDesc{fileIdx} = 'Run_01';
 fileIdx = fileIdx + 1;
 
- inputName = 'EEG_fMRI_20180830_03_Checkerboard_Flash_Inside_bcg.set';
- files(fileIdx) = {[inputDir, inputName]};
-Headers(fileIdx, 1, :) = {'Checkerboard | Run 03 ', 'Epoch: 2s | Analysis: Server'};
-Headers(fileIdx, 2, :) = {'Rest | Run 03', 'Epoch: 2s | Analysis: Server'};
-fileDesc{fileIdx} = 'Run_03';
- fileIdx = fileIdx + 1;
+%  inputName = 'EEG_fMRI_20180830_03_Checkerboard_Flash_Inside_bcg.set';
+%  files(fileIdx) = {[inputDir, inputName]};
+% Headers(fileIdx, 1, :) = {'Checkerboard | Run 03 ', 'Epoch: 2s | Analysis: Server'};
+% Headers(fileIdx, 2, :) = {'Rest | Run 03', 'Epoch: 2s | Analysis: Server'};
+% fileDesc{fileIdx} = 'Run_03';
+%  fileIdx = fileIdx + 1;
 
 inputName = 'EEG_fMRI_20180830_04_Checkerboard_Flash_Inside_bcg.set';
 files(fileIdx) = {[inputDir, inputName]};
@@ -35,33 +35,33 @@ Headers(fileIdx, 1, :) = {'Checkerboard | Run 06 ', 'Epoch: 2s | Analysis: Serve
 Headers(fileIdx, 2, :) = {'Rest | Run 06', 'Epoch: 2s | Analysis: Server'};
 fileDesc{fileIdx} = 'Run_06';
 fileIdx = fileIdx + 1;
-
-% % %***Bad Data
-% % %inputName = 'EEG_fMRI_20180830_Checkerboard_Flash_Outside_bcg.set';
 % 
-inputName = 'EEG_fMRI_20180830_Checkerboard_Flash_Outside_02_bcg.set';
-files(fileIdx) = {[inputDir, inputName]};
-Headers(fileIdx, 1, :) = {'Checkerboard | Outside Scanner ', 'Epoch: 2s | Analysis: Server'};
-Headers(fileIdx, 2, :) = {'Rest | Outside Scanner', 'Epoch: 2s | Analysis: Server'};
-fileDesc{fileIdx} = 'Run_Outside';
-fileIdx = fileIdx + 1;
+% % % %***Bad Data
+% % % %inputName = 'EEG_fMRI_20180830_Checkerboard_Flash_Outside_bcg.set';
+% % 
+% inputName = 'EEG_fMRI_20180830_Checkerboard_Flash_Outside_02_bcg.set';
+% files(fileIdx) = {[inputDir, inputName]};
+% Headers(fileIdx, 1, :) = {'Checkerboard | Outside Scanner ', 'Epoch: 2s | Analysis: Server'};
+% Headers(fileIdx, 2, :) = {'Rest | Outside Scanner', 'Epoch: 2s | Analysis: Server'};
+% fileDesc{fileIdx} = 'Run_Outside';
+% fileIdx = fileIdx + 1;
 
 %Locally processed
-inputDir = '~/Documents/NKI/EEG_Data/Processed_Data/';
-
-inputName = 'EEG_fMRI_20180830_01_Checkerboard_Flash_Inside_04_bcg_bp.set';
-files(fileIdx) = {[inputDir, inputName]};
-Headers(fileIdx, 1, :) = {'Checkerboard | Run 1 ', 'Epoch: 2s | Analysis: Local'};
-Headers(fileIdx, 2, :) = {'Rest | Run 01', 'Epoch: 2s | Analysis: Local'};
-fileDesc{fileIdx} = 'Run_01_local';
-fileIdx = fileIdx + 1;
-
-inputName ='EEG_fMRI_20180830_Checkerboard_Flash_Outside_02_bcg_bp.set';
-files(fileIdx) = {[inputDir, inputName]};
-Headers(fileIdx, 1, :) = {'Checkerboard | Out of Scanner', 'Epoch: 2s | Analysis: Local'};
-Headers(fileIdx, 2, :) = {'Rest | Outside Scanner', 'Epoch: 2s | Analysis: Local'};
-fileDesc{fileIdx} = 'Run_Outside_Local';
-fileIdx = fileIdx + 1;
+% inputDir = '~/Documents/NKI/EEG_Data/Processed_Data/';
+% 
+% inputName = 'EEG_fMRI_20180830_01_Checkerboard_Flash_Inside_04_bcg_bp.set';
+% files(fileIdx) = {[inputDir, inputName]};
+% Headers(fileIdx, 1, :) = {'Checkerboard | Run 1 ', 'Epoch: 2s | Analysis: Local'};
+% Headers(fileIdx, 2, :) = {'Rest | Run 01', 'Epoch: 2s | Analysis: Local'};
+% fileDesc{fileIdx} = 'Run_01_local';
+% fileIdx = fileIdx + 1;
+% 
+% inputName ='EEG_fMRI_20180830_Checkerboard_Flash_Outside_02_bcg_bp.set';
+% files(fileIdx) = {[inputDir, inputName]};
+% Headers(fileIdx, 1, :) = {'Checkerboard | Out of Scanner', 'Epoch: 2s | Analysis: Local'};
+% Headers(fileIdx, 2, :) = {'Rest | Outside Scanner', 'Epoch: 2s | Analysis: Local'};
+% fileDesc{fileIdx} = 'Run_Outside_Local';
+% fileIdx = fileIdx + 1;
 
 %% set Channels and Axis
 
@@ -70,26 +70,142 @@ timeAxis_STD = [0, 2, -20, 20];
 freqAxis_big = [0, 60, 0, 1.5];
 freqAxis_small = [0, 20, 0, 1.5];
 
-for idx = 1:fileIdx - 1
-    %load in EEG
-    EEG_Processed = pop_loadset(files{idx});
+[checkAvg, restAvg, chanLocs] =  averageRuns(files);
+%plotFreqAll_raw(checkAvg, restAvg, 'Freq Run 01, 04, 06', freqAxis_big, chanLocs, 1, 'combinedRun')
+%plotFreq_loc_raw(checkAvg, restAvg, 'Freq Run 01, 04, 06', freqAxis_big, chanLocs, 1, 'combinedRun')
 
-    %Bandpass bcg data
-    EEG_Processed = EEG_Bandpass_Matlab(EEG_Processed, 0.5, 70, 2);
-
-    %find checkerboard and rest epochs
-    [Epochs_Check, Epochs_Rest, EEG_events] = ...
-        EEG_Epoch_checkNrest(EEG_Processed, 'S  1', 'Check', 'Rest');
-    
-    %plotTimeFreq(Epochs_Check, Epochs_Rest, SSVEP_Chan, Headers(idx, :, :), timeAxis, freqAxis_big, freqAxis_small, 1);
-    %plotFreqs(Epochs_Check, Epochs_Rest, SSVEP_Chan, Headers(idx, :, :), freqAxis_big, freqAxis_small, 1);
-    plotLocs(Epochs_Check, Epochs_Rest, Headers(idx, :, :), 1, fileDesc{idx})
-    %plotAllMean(Epochs_Check, Epochs_Rest, Headers(idx, :, :), timeAxis, timeAxis_STD, 1, fileDesc{idx})
-    %close all
-    %plotLocFreqs(Epochs_Check, Epochs_Rest, Headers(idx, :, :), freqAxis_big, 1, fileDesc{idx})
-end
+% for idx = 1:fileIdx - 1
+%     %load in EEG
+%     EEG_Processed = pop_loadset(files{idx});
+% 
+%     %Bandpass bcg data
+%     EEG_Processed = EEG_Bandpass_Matlab(EEG_Processed, 0.5, 70, 2);
+% 
+%     %find checkerboard and rest epochs
+%     [Epochs_Check, Epochs_Rest, EEG_events] = ...
+%         EEG_Epoch_checkNrest(EEG_Processed, 'S  1', 'Check', 'Rest');
+%     
+%     %plotTimeFreq(Epochs_Check, Epochs_Rest, SSVEP_Chan, Headers(idx, :, :), timeAxis, freqAxis_big, freqAxis_small, 1);
+%     %plotFreqs(Epochs_Check, Epochs_Rest, SSVEP_Chan, Headers(idx, :, :), freqAxis_big, freqAxis_small, 1);
+%     %plotLocs(Epochs_Check, Epochs_Rest, Headers(idx, :, :), 1, fileDesc{idx})
+%     %plotLocFreqOverlayed(Epochs_Check, Epochs_Rest, Headers(idx, :, :), freqAxis_big, 1, fileDesc{idx})
+%     %plotAllMean(Epochs_Check, Epochs_Rest, Headers(idx, :, :), timeAxis, timeAxis_STD, 1, fileDesc{idx})
+%     %close all
+%     %plotLocFreqs(Epochs_Check, Epochs_Rest, Headers(idx, :, :), freqAxis_big, 1, fileDesc{idx})
+%     plotAllFreqOverlaid(Epochs_Check, Epochs_Rest, Headers(idx, :, :), freqAxis_big, 1, fileDesc{idx})
+%     close all
+% end
 
 %% plot functions 
+function [checkAvg, restAvg, chanLocs] =  averageRuns(files)
+    for fileIdx = 1:length(files)
+        %Load in EEG run
+        EEG_Processed = pop_loadset(files{fileIdx});
+        %bandpass EEG
+        EEG_Processed = EEG_Bandpass_Matlab(EEG_Processed, 0.5, 70, 2);
+        %get check and rest epochs for current run
+        [Epochs_Check, Epochs_Rest, ~] = ...
+            EEG_Epoch_checkNrest(EEG_Processed, 'S  1', 'Check', 'Rest');
+        %find avg Epochs for current run
+        currentMean_Check = mean(Epochs_Check.data, 3);
+        currentMean_Rest = mean(Epochs_Rest.data, 3);
+        if fileIdx == 1
+            sumMean_Check = currentMean_Check;
+            sumMean_Rest = currentMean_Rest;
+        else
+            sumMean_Check = sumMean_Check + currentMean_Check;
+            sumMean_Rest = sumMean_Rest + currentMean_Rest;
+        end
+    end
+    
+    checkAvg = sumMean_Check ./ length(files);
+    restAvg = sumMean_Rest ./ length(files);
+    chanLocs = EEG_Processed.chanlocs;
+end
+
+function plotFreq_loc_raw(checkData, restData, Header, freqAxis, chanLocs, saveFigs, fileDesc)
+%Plot overlaid frequencies location from raw data
+
+    for chanIdx = 1:64
+        %get checkerboard frequency data
+        Checkfft(chanIdx,:) = fft(checkData(chanIdx,:));
+        Checkfft(chanIdx,:) = abs(fftshift(Checkfft(chanIdx,:)));
+        
+        %get rest frequency data
+        Restfft(chanIdx,:) = fft(restData(chanIdx,:));
+        Restfft(chanIdx,:) = abs(fftshift(Restfft(chanIdx,:)));
+ 
+    end
+    
+    Fs = 5000;
+    N = size(restData, 2);
+    %plot Straight line at 7.5 Hz, then Rest then Check
+    topoData(:,:,3) = Checkfft(:, N/2 + 1:N/2 + (60*2))/N;
+    topoData(:,:,2) = Restfft(:, N/2 + 1:N/2 + (60*2))/N;
+    topoData(:,:,1) = zeros(size(Restfft(:, N/2 + 1:N/2 + (60*2))/N));
+    topoData(:,7.5 * 2 + 1,1) = 1.5;
+    
+    fig = figure;
+
+    limits   = freqAxis;
+    plottopo(topoData, ...
+        'chanlocs', chanLocs, ...
+        'frames', 120, ...
+        'title', Header, ...
+        'limits', limits, ...
+        'colors', {'k--', 'b', 'r'}, ...
+        'ydir', 1);
+
+    if saveFigs
+        dir = '~/Documents/NKI/';
+        fileName = fileDesc;
+        filepng = [dir, fileName, '_Freqs_Loc.png'];
+        saveas(fig, filepng)
+    end
+end
+
+function plotFreqAll_raw(checkData, restData, Header, freqAxis, chanLocs, saveFigs, fileDesc)
+    for chanIdx = 1:64
+        Checkfft(chanIdx,:) = fft(checkData(chanIdx,:));
+        Checkfft(chanIdx,:) = abs(fftshift(Checkfft(chanIdx,:)));
+
+        Restfft(chanIdx,:) = fft(restData(chanIdx,:));
+        Restfft(chanIdx,:) = abs(fftshift(Restfft(chanIdx,:)));
+        
+        fig = figure();
+        hold 
+        
+        %Add Line indicating channel to plot
+        chanHeader = Header;
+        %add line with 'Ch{channum}:{ChanName}'
+        chanInfo = sprintf('Ch%d:%s | Freq overlaid', chanIdx, chanLocs(chanIdx).labels);
+        chanHeader = [Header, ' | ', chanInfo];
+        title(chanHeader)
+        
+        xlabel('Frequency(Hz)')
+        ylabel('uV')
+        axis(freqAxis)
+
+        Fs = 5000;
+        N = size(checkData, 2);
+        dF = Fs/N;
+        f = -Fs/2:dF:Fs/2 - dF;
+        
+        plot(f(N/2 + 1:N/2+(60*2)),abs(Checkfft(chanIdx, N/2 + 1:N/2 + (60*2)))/N)
+        plot(f(N/2 + 1:N/2+(60*2)),abs(Restfft(chanIdx,N/2 + 1:N/2 + (60*2)))/N)
+        line([7.5, 7.5], [0, 1.5], 'color', 'k')
+        legend('Checkerboard','Rest')
+        if saveFigs
+            dir = '~/Documents/NKI/FreqChan_all/';
+            fileName = [fileDesc, '_' ,chanLocs(chanIdx).labels];
+            filepng = [dir, fileName, '_Freq_all_runs.png'];
+            filefig = [dir, fileName, '_Freq_all_runs.fig'];
+            saveas(fig, filepng)
+            saveas(fig, filefig)
+        end
+    end
+end
+
 function plotTimeFreq(checkEpochs, restEpochs, Chans, Headers, timeAxis, freqAxis_big, freqAxis_small, saveFigs)
     
 %% Plot Time Axis for Checkerboard
@@ -673,4 +789,112 @@ function plotLocFreqs(checkEpochs, restEpochs, Headers, freqAxis, saveFigs, file
             filepng = [dir, fileName, '_Rest_FreqsbyChan.png'];
             saveas(fig, filepng)
         end
+end
+
+function plotLocFreqOverlaid(checkEpochs, restEpochs, Headers, freqAxis, saveFigs, fileDesc)
+    for chanIdx = 1:64
+        %get checkerboard frequency data
+        EpochDataT(:,:) = checkEpochs.data(chanIdx,:,:);
+        EpochData = EpochDataT';
+        EpochAvg_Check(chanIdx, :) = mean(EpochData);
+        Checkfft(chanIdx,:) = fft(EpochAvg_Check(chanIdx,:));
+        Checkfft(chanIdx,:) = abs(fftshift(Checkfft(chanIdx,:)));
+        
+        %get rest frequency data
+        EpochDataT(:,:) = restEpochs.data(chanIdx,:,:);
+        EpochData = EpochDataT';
+        EpochAvg_Rest(chanIdx, :) = mean(EpochData);
+        Restfft(chanIdx,:) = fft(EpochAvg_Rest(chanIdx,:));
+        Restfft(chanIdx,:) = abs(fftshift(Restfft(chanIdx,:)));
+ 
+    end
+       %% Get Freq response for each channel
+    
+    Fs = 5000;
+    N = size(EpochAvg_Check, 2);
+    dF = Fs/N;
+    f = -Fs/2:dF:Fs/2 - dF;
+    
+    topoData(:,:,3) = Checkfft(:, N/2 + 1:N/2 + (60*2))/N;
+    topoData(:,:,2) = Restfft(:, N/2 + 1:N/2 + (60*2))/N;
+    topoData(:,:,1) = zeros(size(Restfft(:, N/2 + 1:N/2 + (60*2))/N));
+    topoData(:,7.5 * 2 + 1,1) = 1.5;
+
+    
+    
+    fig = figure;
+    
+    %get header into format readable by eeglab current format is ..
+    %   {lin1Col1|lin1Col2}{lin2Col1|lin2Col2}... Must be in form
+    %   lin1Col1|lin1Col2|lin1Col3|lin1Col4
+    header = Headers{:,1,1};
+    header = [header, ' | Check & Rest Freq'];
+    for headerCellIdx = 2:size(Headers, 3)
+        header = [  header, ' | ', Headers{:,1,headerCellIdx}];
+    end
+
+    
+    limits   = freqAxis;
+    plottopo(topoData, ...
+        'chanlocs', restEpochs.chanlocs, ...
+        'frames', 120, ...
+        'title', header, ...
+        'limits', limits, ...
+        'colors', {'k--', 'b', 'r'}, ...
+        'ydir', 1);
+
+    if saveFigs
+        dir = '~/Documents/NKI/CheckNRest_Freqs_loc/';
+        filepng = [dir, fileDesc, '.png'];
+        saveas(fig, filepng)
+    end
+end
+
+function plotAllFreqOverlaid(checkEpochs, restEpochs, Headers, freqAxis, saveFigs, fileDesc)
+    for chanIdx = 1:64
+        %Transpose data to more workable format
+        EpochDataT(:,:) = checkEpochs.data(chanIdx,:,:);
+        EpochData = EpochDataT';
+        EpochAvg_Check(chanIdx, :) = mean(EpochData);
+        Checkfft(chanIdx,:) = fft(EpochAvg_Check(chanIdx,:));
+        Checkfft(chanIdx,:) = abs(fftshift(Checkfft(chanIdx,:)));
+        
+        %get rest frequency data
+        EpochDataT(:,:) = restEpochs.data(chanIdx,:,:);
+        EpochData = EpochDataT';
+        EpochAvg_Rest(chanIdx, :) = mean(EpochData);
+        Restfft(chanIdx,:) = fft(EpochAvg_Rest(chanIdx,:));
+        Restfft(chanIdx,:) = abs(fftshift(Restfft(chanIdx,:)));
+        
+        fig = figure();
+        hold 
+        
+        %Add Line indicating channel to plot
+        chanHeader = Headers;
+        %add line with 'Ch{channum}:{ChanName}'
+        chanInfo = sprintf('Ch%d:%s | Freq overlaid', chanIdx, checkEpochs.chanlocs(chanIdx).labels);
+        chanHeader(:, :, size(Headers, 3)+1) = {chanInfo};
+        title(chanHeader(:,1,:))
+        
+        xlabel('Frequency(Hz)')
+        ylabel('uV')
+        axis(freqAxis)
+
+        Fs = 5000;
+        N = size(EpochAvg_Check, 2);
+        dF = Fs/N;
+        f = -Fs/2:dF:Fs/2 - dF;
+        
+        plot(f(N/2 + 1:N/2+(60*2)),abs(Checkfft(chanIdx, N/2 + 1:N/2 + (60*2)))/N)
+        plot(f(N/2 + 1:N/2+(60*2)),abs(Restfft(chanIdx,N/2 + 1:N/2 + (60*2)))/N)
+        line([7.5, 7.5], [0, 1.5], 'color', 'k')
+        legend('Checkerboard','Rest')
+        if saveFigs
+            dir = '~/Documents/NKI/FreqChan/';
+            fileName = [fileDesc, '_' ,checkEpochs.chanlocs(chanIdx).labels];
+            filepng = [dir, fileName, '_Freq.png'];
+            saveas(fig, filepng)
+        end
+    end
+
 end
